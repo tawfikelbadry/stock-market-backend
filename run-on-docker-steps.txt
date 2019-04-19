@@ -1,0 +1,17 @@
+That's the steps i followed to run my spring boot app on docker container :
+1. firstly i installed docker , docker engine and docker composse 
+2. pull the images for openjdk:8 and mysql:[version] from docker hub 
+	commands : 
+		 docker pull openjdk:8
+		 docker pull mysql:5.6 
+3.run mysql container and specify your envieoment propirties 
+        command : docker run --name mysql-server-docker -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password -e MYSQL_DATABASE=stock-market -e MYSQL_USER=tawfik -e MYSQL_PASSWORD=password -d mysql:5.6
+4.get the ip for the docker instance that mysql-server-docker run on it 
+	command : docker container inspect --format {{'.NetworkSettings.IPAddress'}} mysql-server-docker
+5.modify application.properties file with  mysql-server-docker container properties 
+6.using maven generate jar file for my application 
+7.create Dockerfile with needed commands ( you can see it in the github repository and any other changes i did )
+8.using this Dockerfile add the image of my application jar  ( be sure you are in the same directory of dockerfile while run following command )
+	command :  docker build -f Dockerfile -t stock-market-backend . 
+9. now run an image from stock-market-backend 
+	command : docker run -p 8085:8085 stock-market-backend
